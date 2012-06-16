@@ -22,7 +22,8 @@ fs.readFile('/path/to/sketch.pde', function(err, data) {
     , stream = canvas.createPNGStream();
 
   stream.pipe(out);
-});```
+});
+```
 
 ## License
 
