@@ -1,0 +1,3 @@
+[submodule "deps/processing-js"]
+	path = deps/processing-js
+	url = git://github.com/processing-js/processing-js.git
