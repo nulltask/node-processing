@@ -1,3 +1,4 @@
+
 # node-processing
 
   [Processing.js](http://processingjs.org/) for [Node.js](http://nodejs.org)
@@ -24,6 +25,10 @@ fs.readFile('/path/to/sketch.pde', function(err, data) {
   stream.pipe(out);
 });
 ```
+
+## Authors
+
+  - Seiya Konno &lt;seiya@uniba.jp&gt; ([nulltask](https://github.com/nulltask))
 
 ## License
 
