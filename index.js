@@ -8,8 +8,10 @@ var fs = require('fs')
   , Canvas = require('canvas')
   , jsdom = require('jsdom').jsdom
   , document = jsdom('<html><head></head><body></body></html>')
+  , Image = Canvas.Image
   , window = document.createWindow()
   , navigator = window.navigator
+  , HTMLImageElement = window.HTMLImageElement
   , createElement = document.createElement
   , noop = function() {}
   , src = fs.readFileSync('./deps/processing-js/processing.js');
@@ -51,6 +53,7 @@ Processing.createElement = document.createElement = function() {
     canvas.attachEvent = noop;
     canvas.setAttribute = noop;
     canvas.getAttribute = noop;
+    canvas.hasAttribute = noop;
 
     return canvas;
   }
