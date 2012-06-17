@@ -5,10 +5,10 @@
 
 var fs = require('fs')
   , util = require('util')
+  , jsdom = require('jsdom')
   , Canvas = require('canvas')
-  , jsdom = require('jsdom').jsdom
-  , document = jsdom('<html><head></head><body></body></html>')
   , Image = Canvas.Image
+  , document = jsdom.jsdom('<!doctype html><html><head></head><body></body></html>')
   , window = document.createWindow()
   , navigator = window.navigator
   , HTMLImageElement = window.HTMLImageElement
