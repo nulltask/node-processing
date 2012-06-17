@@ -15,7 +15,9 @@
     "jsdom": "*",
     "canvas": "*"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "express": "*"
+  },
   "optionalDependencies": {},
   "engines": {
     "node": "*"
