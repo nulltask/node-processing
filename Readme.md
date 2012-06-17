@@ -1,7 +1,8 @@
-
 # node-processing
 
   [Processing.js](http://processingjs.org/) for [Node.js](http://nodejs.org)
+
+![screenshot](http://cl.ly/1R1L2S2n190c0L2j1I32/node-processing.png)
 
 ## Installation
 
