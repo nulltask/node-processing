@@ -7,12 +7,14 @@ var fs = require('fs')
   , extname = require('path').extname
   , jsdom = require('jsdom')
   , express = require('express')
-  , Processing = require('../')
+  , processing = require('../')
   , app = express.createServer();
 
+/*
 process.on('uncaughtException', function(e) {
   console.error(e);
 });
+*/
 
 app.use(express.logger('dev'));
 app.use('/processing-js', express.static(__dirname + '/../deps/processing-js'));
@@ -28,25 +30,22 @@ app.get('/test/:path(*)', function(req, res) {
   
   fs.readFile(__dirname + file, function(err, data) {
     if ('.html' === extname(path)) {
-      var canvas = Processing.document.createElement('canvas')
-        , document = jsdom.jsdom(data + '')
+      var document = jsdom.jsdom(data + '')
         , window = document.createWindow()
         , script = document.getElementsByTagName('script')
         , src = script[script.length - 1].text
-        , p5 = new Processing(canvas, Processing.compile(src));
+        , p5 = processing.createInstance(src, path);
 
       setTimeout(function() {
         p5.noLoop();
-        canvas.createPNGStream().pipe(res);
+        p5.canvas.createPNGStream().pipe(res);
       }, 500);
     } else {
-      var canvas = Processing.document.createElement('canvas')
-        , p5 = new Processing(canvas, Processing.compile(data + ''))
-        , stream = canvas.createPNGStream();
+      var p5 = processing.createInstance(__dirname + file);
       
       setTimeout(function() {
         p5.noLoop();
-        canvas.createPNGStream().pipe(res);
+        p5.canvas.createPNGStream().pipe(res);
       }, 500);
     }
   });
