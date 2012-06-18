@@ -3,3 +3,6 @@ npm-debug.log
 .git*
 examples/
 test/
+deps/processing-js/examples
+deps/procesisng-js/test
+deps/processing-js/tools
