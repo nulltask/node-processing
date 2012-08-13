@@ -16,7 +16,7 @@ $ npm install processing
 ```javascript
 var fs = require('fs')
   , sketch = __dirname + '/scribbleplotter.pde'
-  , processing = require('../../');
+  , processing = require('processing');
 
 fs.readFile(sketch, function(err, data) {
   var p5 = processing.createInstance(data, sketch)
