@@ -2,7 +2,7 @@
   "author": "Seiya Konno <nulltask@gmail.com> (http://null.ly)",
   "name": "processing",
   "description": "Processing.js for Node.js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/uniba/node-processing",
   "repository": {
     "url": "git@github.com:uniba/node-processing.git"
