@@ -27,6 +27,45 @@ fs.readFile(sketch, function(err, data) {
 });
 ```
 
+## Usage
+
+```javascript
+// Compile processing code into javascript, so it can be used in a LAMP webapp more effectively (no p5 lang parsing step by client needed)
+// Intended to use with Grunt when developing and deploying web applications
+// contribution by kroko.me
+
+var fs = require('fs');
+var p5 = require('processing');
+if (process.argv.length != 5) {
+    console.log("Usage: node compile.js <input-sketch.pde> <output-filename.js> <variable-name-to-store-p5js-app-into>");
+    process.exit(code = 1);
+}
+else {
+    console.log("Reading file: " + process.argv[2]);
+    console.log("Output will be: " + process.argv[3]);
+    console.log("Variable will be: " + process.argv[4]);
+}
+console.log("Compiling sketch...");
+
+fs.readFile(process.argv[2], function(err, data) {
+    var compiled = p5.Processing.compile(data.toString('utf-8'));
+    compiled = "var " + process.argv[4] + " = " + compiled + ";";
+    fs.writeFile(process.argv[3], compiled, function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("...done!");
+        }
+    });
+});
+
+// Usage in web
+// var domCanvas = document.getElementById('id-of-canvas-dom-element');
+// pjsPtr = new Processing(domCanvas, valiable-name-as-passed-to-this-script);
+// if (pjsPtr) { }
+```
+
+
 ## Authors
 
   - Seiya Konno &lt;seiya@uniba.jp&gt; ([nulltask](https://github.com/nulltask))
