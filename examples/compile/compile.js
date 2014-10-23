@@ -3,7 +3,7 @@
 // contribution by kroko.me
 
 var fs = require('fs');
-var p5 = require('processing');
+var p5 = require('../../');
 if (process.argv.length != 5) {
     console.log("Usage: node compile.js <input_sketch.pde> <output_filename.js> <variable_name_to_store_p5js_app_into>");
     process.exit(code = 1);
