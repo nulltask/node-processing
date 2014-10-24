@@ -1,0 +1,8 @@
+<h1>Example App: Home</h1>
+
+
+  {{#each tests}}
+  	<a href="test/{{this.path}}" target="_blank"><img src="test/{{this.path}}"></a>
+	<p>{{this.path}}</p>
+   
+  {{/each}}
