@@ -4,11 +4,11 @@
  */
 
 var fs = require('fs')
+  , Canvas = require("canvas")
   , path = require("path")
   , extname = require('path').extname
-  , jsdom = require('jsdom')
   , express = require('express')
-  , processing = require('../')
+  , Processing = require('../')
   , exphbs  = require('express3-handlebars')
   , app = express()
   , morgan = require('morgan')
@@ -31,7 +31,6 @@ var pathToref = "../deps/processing-js/test/ref";
 filedata = fs.readFileSync(path.join(__dirname, pathToref, 'tests.js'),'utf8');
 eval(filedata);
 
-process.on('uncaughtException', function(){});
 
 app.get('/', function(req, res) {
   res.render('home', {"tests" : tests});
@@ -41,7 +40,7 @@ app.get('/test/:path(*)', function(req, res) {
   var pdePath = req.params.path
     , file = path.join(__dirname, pathToref, pdePath);
   // console.log(file);
-  fs.readFile(file, function(err, data) {
+  fs.readFile(file, {"encoding": "utf-8"}, function(err, data) {
     if(err){
       console.log(err);
       res.send(err);
@@ -59,11 +58,12 @@ app.get('/test/:path(*)', function(req, res) {
           p5.canvas.createPNGStream().pipe(res);
         }, 500);
       } else {
-        var p5 = processing.createInstance(file);
+        var canvas = new Canvas(200,200);
+        var p5 = new Processing(canvas, data);
         
         setTimeout(function() {
           p5.noLoop();
-          p5.canvas.createPNGStream().pipe(res);
+          canvas.createPNGStream().pipe(res);
         }, 500);
       }
     } catch (e) {
