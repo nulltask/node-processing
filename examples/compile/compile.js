@@ -3,7 +3,7 @@
 // contribution by kroko.me
 
 var fs = require('fs');
-var p5 = require('../../');
+var Processing = require('../../');
 if (process.argv.length != 5) {
     console.log("Usage: node compile.js <input_sketch.pde> <output_filename.js> <variable_name_to_store_p5js_app_into>");
     process.exit(code = 1);
@@ -14,9 +14,10 @@ else {
     console.log("Variable will be: " + process.argv[4]);
 }
 console.log("Compiling sketch...");
+// console.log(Processing);
 
 fs.readFile(process.argv[2], function(err, data) {
-    var compiled = p5.Processing.compile(data.toString('utf-8'));
+    var compiled = Processing.compile(data.toString('utf-8'));
     compiled = "var " + process.argv[4] + " = " + compiled + ";";
     fs.writeFile(process.argv[3], compiled, function(err) {
         if (err) {
