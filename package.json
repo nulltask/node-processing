@@ -12,11 +12,9 @@
     "test": "make test"
   },
   "dependencies": {
-    "jsdom": "0.11.1",
-    "xmlhttprequest": "*",
-    "canvas": "*"
   },
   "devDependencies": {
+    "canvas": "*",
     "express": "*",
     "morgan" : "*",
     "serve-index" : "*",
