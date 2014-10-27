@@ -31,9 +31,16 @@ var pathToref = "../deps/processing-js/test/ref";
 filedata = fs.readFileSync(path.join(__dirname, pathToref, 'tests.js'),'utf8');
 eval(filedata);
 
+selectedTests = new Array();
+for(var i = 0; i < tests.length; ++i) {
+  if(tests[i].tags.indexOf("2D") !== -1){
+    selectedTests.push(tests[i]);
+  }
+}
+
 
 app.get('/', function(req, res) {
-  res.render('home', {"tests" : tests});
+  res.render('home', {"tests" : selectedTests});
 });
 
 app.get('/test/:path(*)', function(req, res) {

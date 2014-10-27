@@ -15,10 +15,13 @@
   },
   "devDependencies": {
     "canvas": "*",
+    "gifencoder": "*",
+    "animation": "*",
     "express": "*",
     "morgan" : "*",
     "serve-index" : "*",
     "express3-handlebars" : "*"
+
   },
   "optionalDependencies": {},
   "engines": {
