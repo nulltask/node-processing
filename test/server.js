@@ -4,27 +4,65 @@
  */
 
 var fs = require('fs')
+  , Canvas = require("canvas")
+  , path = require("path")
   , extname = require('path').extname
-  , jsdom = require('jsdom')
   , express = require('express')
-  , processing = require('../')
-  , app = express();
+  , Processing = require('../')
+  , exphbs  = require('express3-handlebars')
+  , app = express()
+  , morgan = require('morgan')
+  , serveIndex = require('serve-index')
+  , colors = require('colors/safe');
 
-app.use(express.logger('dev'));
-app.use('/processing-js', express.static(__dirname + '/../deps/processing-js'));
-app.use('/processing-js', express.directory(__dirname + '/../deps/processing-js'));
+// Set Handlebars to use the test directory
+app.engine('handlebars', exphbs({
+  layoutsDir: __dirname, 
+  defaultLayout: 'main'
+}));
+app.set('views',  __dirname);
+app.set('view engine', 'handlebars');
 
-process.on('uncaughtException', function(){});
+//Set up Logging
+app.use(morgan('combined'));
+
+var pathToref = "../deps/processing-js/test/ref";
+
+//pull in list of test to merge with template
+var filedata = fs.readFileSync(path.join(__dirname, pathToref, 'tests.js'),'utf8');
+eval(filedata);
+
+selectedTests = new Array();
+for(var i = 0; i < tests.length; ++i) {
+  if(tests[i].tags.indexOf("2D") !== -1){
+    selectedTests.push(tests[i]);
+    // if(i > 60){
+    //   break;
+    // }
+  }
+}
+
 
 app.get('/', function(req, res) {
-  res.sendfile(__dirname + '/index.html');
+  res.render('home', {"tests" : selectedTests});
 });
 
+//This needs to be global
+loadImagePath = require("path").join(__dirname, '../deps/processing-js/test/ref/');
+process.on('uncaughtException', function(e){
+  console.log(colors.red.underline(e));
+});
+
+
 app.get('/test/:path(*)', function(req, res) {
-  var path = req.params.path
-    , file = '/../deps/processing-js/examples/' + path;
-  
-  fs.readFile(__dirname + file, function(err, data) {
+  var pdePath = req.params.path
+    , file = path.join(__dirname, pathToref, pdePath);
+  // console.log(file);
+  fs.readFile(file, {"encoding": "utf-8"}, function(err, data) {
+    if(err){
+      console.log(err);
+      res.send(err);
+    }
     try {
       if ('.html' === extname(path)) {
         var document = jsdom.jsdom(data + '')
@@ -38,14 +76,16 @@ app.get('/test/:path(*)', function(req, res) {
           p5.canvas.createPNGStream().pipe(res);
         }, 500);
       } else {
-        var p5 = processing.createInstance(__dirname + file);
+        var canvas = new Canvas(200,200);
+        var p5 = new Processing(canvas, data);
         
         setTimeout(function() {
           p5.noLoop();
-          p5.canvas.createPNGStream().pipe(res);
+          canvas.createPNGStream().pipe(res);
         }, 500);
       }
     } catch (e) {
+      console.log(e);
       res.send(e);
     }
   });
