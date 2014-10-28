@@ -12,7 +12,8 @@ var fs = require('fs')
   , exphbs  = require('express3-handlebars')
   , app = express()
   , morgan = require('morgan')
-  , serveIndex = require('serve-index');
+  , serveIndex = require('serve-index')
+  , colors = require('colors/safe');
 
 // Set Handlebars to use the test directory
 app.engine('handlebars', exphbs({
@@ -28,13 +29,16 @@ app.use(morgan('combined'));
 var pathToref = "../deps/processing-js/test/ref";
 
 //pull in list of test to merge with template
-filedata = fs.readFileSync(path.join(__dirname, pathToref, 'tests.js'),'utf8');
+var filedata = fs.readFileSync(path.join(__dirname, pathToref, 'tests.js'),'utf8');
 eval(filedata);
 
 selectedTests = new Array();
 for(var i = 0; i < tests.length; ++i) {
   if(tests[i].tags.indexOf("2D") !== -1){
     selectedTests.push(tests[i]);
+    // if(i > 60){
+    //   break;
+    // }
   }
 }
 
@@ -42,6 +46,13 @@ for(var i = 0; i < tests.length; ++i) {
 app.get('/', function(req, res) {
   res.render('home', {"tests" : selectedTests});
 });
+
+//This needs to be global
+loadImagePath = require("path").join(__dirname, '../deps/processing-js/test/ref/');
+process.on('uncaughtException', function(e){
+  console.log(colors.red.underline(e));
+});
+
 
 app.get('/test/:path(*)', function(req, res) {
   var pdePath = req.params.path
@@ -74,6 +85,7 @@ app.get('/test/:path(*)', function(req, res) {
         }, 500);
       }
     } catch (e) {
+      console.log(e);
       res.send(e);
     }
   });

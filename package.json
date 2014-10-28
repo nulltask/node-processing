@@ -12,15 +12,17 @@
     "test": "make test"
   },
   "dependencies": {
+    "canvas": "*"
   },
   "devDependencies": {
-    "canvas": "*",
     "gifencoder": "*",
     "animation": "*",
     "express": "*",
     "morgan" : "*",
     "serve-index" : "*",
-    "express3-handlebars" : "*"
+    "express3-handlebars" : "*",
+    "traceback" : "*",
+    "colors" : "*"
 
   },
   "optionalDependencies": {},

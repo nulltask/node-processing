@@ -17,5 +17,6 @@ fs.readFile(sketch, {"encoding": "utf-8"}, function(err, data) {
     , out = fs.createWriteStream(__dirname + '/scribbleplotter.png')
     , stream = canvas.createPNGStream();
 
+
   stream.pipe(out);
 });
