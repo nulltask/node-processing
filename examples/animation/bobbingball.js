@@ -26,9 +26,7 @@ fs.readFile(sketch, {"encoding": "utf-8"}, function(err, data) {
     encoder.addFrame(ctx);
   }
 
-
   encoder.start();
-  
   
   //Finish the animation
   setTimeout(function(){
@@ -36,7 +34,6 @@ fs.readFile(sketch, {"encoding": "utf-8"}, function(err, data) {
       encoder.finish();
       //Stop Processing from looping
       p5.noLoop();
-
       
   }, 3600);
 

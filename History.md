@@ -1,3 +1,12 @@
+0.4.0 / 2014-10-28
+==================
+
+  * Processing.js v1.4.8
+  * API Changed 
+  * Removed dependency upon nsdom
+  * Added the ability to generate server side animations (see examples)
+  * Updated server.js to show latest tests
+
 
 0.3.0 / 2012-08-13 
 ==================

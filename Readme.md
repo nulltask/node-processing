@@ -3,7 +3,8 @@
 
   [Processing.js](http://processingjs.org/) for [Node.js](http://nodejs.org)
 
-![screenshot](http://cl.ly/1R1L2S2n190c0L2j1I32/node-processing.png)
+![screenshot](https://raw.github.com/sudsy/node-processing/master/testServer.png)
+
 
 ## Installation
 
@@ -11,17 +12,23 @@
 $ npm install processing
 ```
 
+## Issues
+1. Currently does not support 3d sketches 
+2. Has buggy support for loadImage and loadSVG (run make test-server to see examples that are not working) 
+
 ## Usage
 
 ```javascript
 var fs = require('fs')
   , sketch = __dirname + '/scribbleplotter.pde'
-  , processing = require('processing');
+  , Processing = require('processing')
+  , Canvas = require("canvas")
+  , canvas = new Canvas(200,200);
 
 fs.readFile(sketch, function(err, data) {
-  var p5 = processing.createInstance(data, sketch)
+  var p5 = new Processing(canvas, data)
     , out = fs.createWriteStream(__dirname + '/scribbleplotter.png')
-    , stream = p5.canvas.createPNGStream();
+    , stream = canvas.createPNGStream();
 
   stream.pipe(out);
 });
@@ -35,7 +42,7 @@ fs.readFile(sketch, function(err, data) {
 // contribution by kroko.me
 
 var fs = require('fs');
-var p5 = require('processing');
+var Processing = require('processing');
 if (process.argv.length != 5) {
     console.log("Usage: node compile.js <input-sketch.pde> <output-filename.js> <variable-name-to-store-p5js-app-into>");
     process.exit(code = 1);
@@ -48,7 +55,7 @@ else {
 console.log("Compiling sketch...");
 
 fs.readFile(process.argv[2], function(err, data) {
-    var compiled = p5.Processing.compile(data.toString('utf-8'));
+    var compiled = Processing.compile(data.toString('utf-8'));
     compiled = "var " + process.argv[4] + " = " + compiled + ";";
     fs.writeFile(process.argv[3], compiled, function(err) {
         if (err) {
@@ -65,10 +72,68 @@ fs.readFile(process.argv[2], function(err, data) {
 // if (pjsPtr) { }
 ```
 
+## Usage - Animation
+
+![Animated Example](https://raw.github.com/sudsy/node-processing/master/examples/animation/bobbingball.gif)
+
+```javascript
+// Generate server side animations with processing
+
+var fs = require('fs'),
+  sketch = __dirname + '/bobbingball.pde',
+  Processing = require('../../'),
+  Canvas = require("canvas"),
+  GIFEncoder = require("gifencoder");
+
+ 
+
+ var canvas = new Canvas(400,400);
+ var ctx = canvas.getContext('2d');
+
+ var encoder = new GIFEncoder(400, 400);
+ encoder.createReadStream().pipe(fs.createWriteStream('bobbingball.gif'));
+ encoder.setDelay(40); 
+
+
+fs.readFile(sketch, {"encoding": "utf-8"}, function(err, data) {
+  if(err){
+    console.log(err);
+  }
+
+  var p5 = new Processing(canvas, data);
+  
+  p5.onAfterDraw = function(){
+
+    encoder.addFrame(ctx);
+  }
+
+  encoder.start();
+  
+  //Finish the animation
+  setTimeout(function(){
+      //stop encoding the gif
+      encoder.finish();
+      //Stop Processing from looping
+      p5.noLoop();
+      
+  }, 3600);
+
+
+});
+
+
+```
+
 
 ## Authors
 
   - Seiya Konno &lt;seiya@uniba.jp&gt; ([nulltask](https://github.com/nulltask))
+
+## Contributors
+
+  - Reinis Adovičs ([kroko](https://github.com/kroko))
+  - Ben Sudbury ([sudsy](https://github.com/sudsy))
+
 
 ## License
 
